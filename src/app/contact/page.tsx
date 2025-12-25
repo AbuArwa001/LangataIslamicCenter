@@ -173,7 +173,7 @@ export default function ContactPage() {
                                             type="text"
                                             id="firstName"
                                             className="w-full px-4 py-3 border-b-2 border-gray-100 focus:border-[#00b17b] bg-transparent focus:outline-none transition-colors"
-                                            placeholder="John"
+                                            placeholder="Salim"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -182,7 +182,7 @@ export default function ContactPage() {
                                             type="text"
                                             id="lastName"
                                             className="w-full px-4 py-3 border-b-2 border-gray-100 focus:border-[#00b17b] bg-transparent focus:outline-none transition-colors"
-                                            placeholder="Doe"
+                                            placeholder="Salim"
                                         />
                                     </div>
                                 </div>
@@ -193,7 +193,7 @@ export default function ContactPage() {
                                         type="email"
                                         id="email"
                                         className="w-full px-4 py-3 border-b-2 border-gray-100 focus:border-[#00b17b] bg-transparent focus:outline-none transition-colors"
-                                        placeholder="john@example.com"
+                                        placeholder="salim@example.com"
                                     />
                                 </div>
 
