@@ -27,7 +27,7 @@ export default function Header() {
   return (
     <header className="bg-[#0f0f0f] text-white py-4 md:py-6 sticky top-0 z-50 border-b border-white/5 font-serif">
       <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        
+
         {/* Mobile Logo / Brand */}
         <div className="md:hidden">
           <Link href="/" className="text-[#FFC06E] font-bold text-lg tracking-wider">
@@ -36,13 +36,13 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation - Hidden on Mobile */}
-        <div className="hidden md:flex space-x-10 items-center mx-auto">
-          {navLinks.map((link) => {
+        <div className="hidden md:flex space-x-8 items-center mx-auto">
+          {navLinks.filter(link => link.name !== "Donate").map((link) => {
             const isActive = pathname === link.href;
             const isHighlighted = isActive || (link.name === "About Us" && isAboutHovered);
-            
+
             return (
-              <div 
+              <div
                 key={link.name}
                 className="relative"
                 onMouseEnter={() => link.hasDropdown && setIsAboutHovered(true)}
@@ -50,15 +50,14 @@ export default function Header() {
               >
                 <Link
                   href={link.href}
-                  className={`text-[15px] font-medium transition-all duration-300 relative pb-1 flex items-center gap-1 ${
-                    isHighlighted ? "text-[#FFC06E]" : "text-white hover:text-[#FFC06E]"
-                  }`}
+                  className={`text-[15px] font-medium transition-all duration-300 relative pb-1 flex items-center gap-1 ${isHighlighted ? "text-[#FFC06E]" : "text-white hover:text-[#FFC06E]"
+                    }`}
                 >
                   {link.name}
                   {link.hasDropdown && <ChevronDown size={14} className={`mt-0.5 transition-transform ${isAboutHovered ? 'rotate-180' : ''}`} />}
-                  
+
                   {isHighlighted && (
-                    <motion.div 
+                    <motion.div
                       layoutId="navUnderline"
                       className="absolute -bottom-1 left-0 right-0 h-[2.5px] bg-[#FFC06E]"
                     />
@@ -91,10 +90,18 @@ export default function Header() {
               </div>
             );
           })}
+
+          {/* Donate Button - Desktop */}
+          <Link
+            href="/donate"
+            className="bg-[#00b17b] hover:bg-[#009e6d] text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+          >
+            Donate Now
+          </Link>
         </div>
 
         {/* Mobile Menu Button - Visible only on Mobile */}
-        <button 
+        <button
           className="md:hidden text-[#FFC06E] p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
@@ -138,7 +145,7 @@ export default function Header() {
 
                   {/* Mobile Dropdown items */}
                   {link.hasDropdown && mobileAboutOpen && (
-                    <motion.div 
+                    <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       className="ml-4 mt-4 flex flex-col space-y-4 border-l-2 border-[#FFC06E]/30 pl-4"
@@ -152,8 +159,8 @@ export default function Header() {
             </div>
 
             <div className="mt-auto">
-              <Link 
-                href="/donate" 
+              <Link
+                href="/donate"
                 className="block w-full text-center bg-[#00b17b] py-4 rounded-xl font-bold text-lg"
               >
                 Donate Now

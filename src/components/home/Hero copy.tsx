@@ -5,7 +5,7 @@ export default function Hero() {
     return (
         <section className="relative w-full py-24 md:py-32 lg:py-40 bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white overflow-hidden">
             {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+            <div className="absolute inset-0 bg-[url('/donation.png')] opacity-10"></div>
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
             <div className="container px-4 md:px-6 relative z-10 flex flex-col items-center text-center">

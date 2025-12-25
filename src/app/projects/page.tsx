@@ -1,172 +1,154 @@
-import { HandCoins, BookOpen, Handshake, User } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight, Users, Heart, Share2, User } from "lucide-react";
+import { fetchProjects } from "@/lib/api";
 
-export default function ProjectsPage() {
+// Define interface for Project
+interface Project {
+    id: string;
+    name: string;
+    description: string;
+    start_date: string;
+    goal_amount: number;
+    current_amount: number;
+    status: string;
+    image: string | null;
+}
+
+export default async function ProjectsPage() {
+    let projects: Project[] = [];
+    try {
+        projects = await fetchProjects();
+    } catch (error) {
+        console.error("Failed to load projects", error);
+    }
+
+    // Fallback images since API might not have them yet
+    const getProjectImage = (p: Project, index: number) => {
+        if (p.image) return p.image;
+        const placeholders = ["/about_1.jpg", "/building-render-placeholder.jpg", "/about_2.jpg"];
+        return placeholders[index % placeholders.length];
+    }
+
+    const featuredProject = projects[0];
+    const otherProjects = projects.slice(1);
+
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-[#fdfdf8]">
             {/* Hero Section */}
-            <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center">
+            <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="/hero-mosque.jpg"
-                        alt="Mosque Background"
+                        alt="Mosque Architecture"
                         fill
                         className="object-cover"
                         priority
                     />
                     <div className="absolute inset-0 bg-black/60" />
                 </div>
-                <div className="relative z-10 container mx-auto px-4 text-center space-y-6">
-                    <h1 className="text-4xl md:text-6xl font-bold text-white">
-                        <span className="text-secondary">Our Projects</span> <span className="text-primary">& Facilities</span>
+
+                <div className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-6">
+                    <h1 className="text-5xl md:text-7xl font-bold text-white font-serif tracking-tight drop-shadow-lg">
+                        Our Projects
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto">
-                        Explore our ongoing and completed projects that serve the community.
+                    <p className="text-xl md:text-2xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed">
+                        Building the future of our community, one brick at a time.
                     </p>
                 </div>
             </section>
 
-            {/* Ongoing & Completed Projects Section */}
-            <section className="py-16 md:py-24 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold">
-                            <span className="text-secondary">Ongoing &</span> <span className="text-primary">Completed Projects</span>
-                        </h2>
-                    </div>
+            <div className="container mx-auto px-4 py-16 md:py-24 -mt-20 relative z-20">
 
-                    <div className="space-y-12">
-                        {/* Featured Project: Revert Center Establishment */}
-                        <div className="relative w-full aspect-[21/9] min-h-[400px] rounded-2xl overflow-hidden group shadow-xl">
+                {/* Featured Project */}
+                {featuredProject && (
+                    <div className="mb-20">
+                        <h2 className="text-sm font-bold text-[#00b17b] uppercase tracking-widest mb-6 flex items-center gap-2">
+                            <span className="w-8 h-[2px] bg-[#00b17b]"></span>
+                            Featured Project
+                        </h2>
+                        <Link href={`/projects/${featuredProject.id}`} className="group block relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="/about_1.jpg" // Placeholder
-                                alt="Revert Center Establishment"
+                                src={getProjectImage(featuredProject, 0)}
+                                alt={featuredProject.name}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 md:p-12">
-                                <h3 className="text-3xl md:text-5xl font-bold text-secondary mb-4 drop-shadow-md font-serif">
-                                    Revert Center Establishment
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                            <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full md:w-2/3 space-y-4">
+                                <div className="inline-block bg-[#00b17b] text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
+                                    {featuredProject.status}
+                                </div>
+                                <h3 className="text-3xl md:text-5xl font-bold text-white font-serif leading-tight group-hover:text-[#FFC06E] transition-colors">
+                                    {featuredProject.name}
                                 </h3>
-                                <div className="flex items-center space-x-4 text-sm text-gray-300 uppercase tracking-wider mb-4 font-medium">
-                                    <div className="flex items-center">
-                                        <User className="w-4 h-4 mr-2" />
-                                        ADMIN
-                                    </div>
-                                    <span>•</span>
-                                    <span>APRIL 18, 2025</span>
-                                </div>
-                                <p className="text-lg text-gray-200 max-w-4xl drop-shadow-sm">
-                                    About Project Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                <p className="text-gray-300 text-lg line-clamp-2">
+                                    {featuredProject.description}
                                 </p>
-                            </div>
-                        </div>
-
-                        {/* Other Projects Grid */}
-                        <div className="grid md:grid-cols-2 gap-8">
-                            {/* Project 2: College Construction */}
-                            <div className="group space-y-6">
-                                <div className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-lg">
-                                    <Image
-                                        src="/building-render-placeholder.jpg" // Placeholder
-                                        alt="College Construction"
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                </div>
-                                <div className="space-y-3">
-                                    <h3 className="text-2xl md:text-3xl font-bold text-[#3d2616] font-serif">COLLEGE CONSTRUCTION</h3>
-                                    <div className="flex items-center space-x-4 text-xs text-muted-foreground uppercase tracking-wider font-medium">
-                                        <div className="flex items-center">
-                                            <User className="w-3 h-3 mr-2" />
-                                            ADMIN
-                                        </div>
-                                        <span>•</span>
-                                        <span>APRIL 18, 2025</span>
-                                    </div>
-                                    {/* Description removed to match the screenshot style more closely if needed, or kept brief */}
+                                <div className="pt-4 flex items-center text-white font-bold text-sm tracking-wide uppercase">
+                                    View Details <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                                 </div>
                             </div>
+                        </Link>
+                    </div>
+                )}
 
-                            {/* Project 3: Revert Center Establishment (Repeated for Grid Demo per screenshot) */}
-                            <div className="group space-y-6">
-                                <div className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-lg">
+                {/* Projects Grid */}
+                <div className="grid md:grid-cols-2 gap-8">
+                    {otherProjects.map((project, index) => (
+                        <Link key={project.id} href={`/projects/${project.id}`} className="block group h-full">
+                            <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
+                                <div className="relative h-64 overflow-hidden">
                                     <Image
-                                        src="/about_2.jpg" // Placeholder
-                                        alt="Revert Center Establishment"
+                                        src={getProjectImage(project, index + 1)}
+                                        alt={project.name}
                                         fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
-                                </div>
-                                <div className="space-y-3">
-                                    <h3 className="text-2xl md:text-3xl font-bold text-[#3d2616] font-serif">Revert Center Establishment</h3>
-                                    <div className="flex items-center space-x-4 text-xs text-muted-foreground uppercase tracking-wider font-medium">
-                                        <div className="flex items-center">
-                                            <User className="w-3 h-3 mr-2" />
-                                            ADMIN
-                                        </div>
-                                        <span>•</span>
-                                        <span>APRIL 18, 2025</span>
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#3d2616] shadow-sm">
+                                        {project.status}
                                     </div>
-                                    <p className="text-muted-foreground line-clamp-2">
-                                        About Project Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                                </div>
+
+                                <div className="p-8 flex flex-col flex-grow">
+                                    <div className="flex items-center gap-2 text-xs font-bold text-[#00b17b] uppercase tracking-wider mb-3">
+                                        <span>{project.start_date}</span>
+                                    </div>
+
+                                    <h3 className="text-2xl font-bold text-[#3d2616] mb-3 font-serif group-hover:text-[#00b17b] transition-colors">
+                                        {project.name}
+                                    </h3>
+
+                                    <p className="text-[#5c4033] mb-6 line-clamp-3 leading-relaxed flex-grow">
+                                        {project.description}
                                     </p>
+
+                                    <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-sm font-medium text-[#3d2616]">
+                                        <span className="group-hover:underline decoration-[#00b17b] decoration-2 underline-offset-4">Read More</span>
+                                        <ArrowRight className="w-4 h-4 text-[#00b17b] transition-transform group-hover:translate-x-1" />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </article>
+                        </Link>
+                    ))}
                 </div>
-            </section>
 
-            {/* Community Engagement Section */}
-            <section className="py-16 md:py-24 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-16 space-y-4">
-                        <h4 className="text-xl font-bold text-[#3d2616] font-serif">Get Involved</h4>
-                        <h2 className="text-4xl md:text-5xl font-bold">
-                            <span className="text-secondary">Community</span> <span className="text-primary">Engagement</span>
-                        </h2>
-                        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                            At Langata Islamic Center, we believe in the power of community. Join us in our efforts to uplift our neighborhood with initiatives focused on giving and support.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Charity Drives */}
-                        <div className="bg-gradient-to-b from-[#ffdea6] to-[#ffc56e] p-8 rounded-[2rem] text-center space-y-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-200/50">
-                            <div className="flex justify-center">
-                                <HandCoins className="w-12 h-12 text-primary" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-[#3d2616] font-serif">Charity Drives</h3>
-                            <p className="text-[#5c4033] leading-relaxed">
-                                Get involved in our charity drives that address local needs and assist those who are facing difficulties in our community.
-                            </p>
+                {/* Community Engagement Section */}
+                <div className="mt-32 grid md:grid-cols-3 gap-8">
+                    {[
+                        { icon: Users, title: "Become a Volunteer", desc: "Join our dedicated team serving the community." },
+                        { icon: Heart, title: "Make a Donation", desc: "Support our ongoing projects and initiatives." },
+                        { icon: Share2, title: "Spread the Word", desc: "Help us reach more people by sharing our mission." }
+                    ].map((item, i) => (
+                        <div key={i} className="bg-gradient-to-br from-[#00b17b] to-[#009e6d] p-8 rounded-2xl text-white text-center shadow-xl hover:-translate-y-1 transition-transform">
+                            <item.icon className="w-12 h-12 mx-auto mb-6 text-[#FFC06E]" />
+                            <h3 className="text-xl font-bold mb-3 font-serif">{item.title}</h3>
+                            <p className="text-white/90 leading-relaxed">{item.desc}</p>
                         </div>
-
-                        {/* Educational Workshops */}
-                        <div className="bg-gradient-to-b from-[#ffdea6] to-[#ffc56e] p-8 rounded-[2rem] text-center space-y-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform md:-translate-y-6 border border-orange-200/50">
-                            <div className="flex justify-center">
-                                <BookOpen className="w-12 h-12 text-primary" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-[#3d2616] font-serif">Educational Workshops</h3>
-                            <p className="text-[#5c4033] leading-relaxed">
-                                Participate in our workshops that aim to enlighten minds and encourage personal development and community understanding.
-                            </p>
-                        </div>
-
-                        {/* Volunteer Opportunities */}
-                        <div className="bg-gradient-to-b from-[#ffdea6] to-[#ffc56e] p-8 rounded-[2rem] text-center space-y-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-200/50">
-                            <div className="flex justify-center">
-                                <Handshake className="w-12 h-12 text-primary" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-[#3d2616] font-serif">Volunteer Opportunities</h3>
-                            <p className="text-[#5c4033] leading-relaxed">
-                                Join our volunteer events and help us bring positive change through various community projects.
-                            </p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
-            </section>
+
+            </div>
         </div>
     );
 }
