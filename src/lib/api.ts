@@ -11,7 +11,6 @@ export async function fetchProjects() {
 export async function fetchProject(id: string) {
     const res = await fetch(`${API_BASE_URL}/projects/${id}/`, { cache: 'no-store' });
     if (!res.ok) {
-        // Fallback: Fetch all and find by ID if the direct endpoint fails (e.g. if ID is actually a slug)
         const projects = await fetchProjects();
         const project = projects.find((p: any) => p.id === id);
         if (project) return project;
