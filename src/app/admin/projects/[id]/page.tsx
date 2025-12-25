@@ -25,7 +25,7 @@ export default function ProjectForm() {
             // Fetch project details
             const fetchProject = async () => {
                 try {
-                    const res = await fetch(`http://localhost:8000/api/v1/projects/${id}/`);
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/`);
                     if (res.ok) {
                         const data = await res.json();
                         setFormData({
@@ -50,8 +50,8 @@ export default function ProjectForm() {
         setLoading(true);
 
         const url = isNew
-            ? 'http://localhost:8000/api/v1/projects/'
-            : `http://localhost:8000/api/v1/projects/${id}/`;
+            ? `${process.env.NEXT_PUBLIC_API_URL}/projects/`
+            : `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/`;
 
         const method = isNew ? 'POST' : 'PUT';
 
