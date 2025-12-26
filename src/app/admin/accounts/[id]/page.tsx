@@ -22,7 +22,7 @@ export default function AccountForm() {
         if (!isNew && id) {
             const fetchAccount = async () => {
                 try {
-                    const res = await fetch(`http://localhost:8000/api/v1/donations/accounts/${id}/`);
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/${id}/`);
                     if (res.ok) {
                         const data = await res.json();
                         setFormData({
@@ -45,8 +45,8 @@ export default function AccountForm() {
         setLoading(true);
 
         const url = isNew
-            ? 'http://localhost:8000/api/v1/donations/accounts/'
-            : `http://localhost:8000/api/v1/donations/accounts/${id}/`;
+            ? `${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/`
+            : `${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/${id}/`;
 
         const method = isNew ? 'POST' : 'PUT';
 

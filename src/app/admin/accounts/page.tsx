@@ -18,7 +18,7 @@ export default function AdminAccounts() {
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/v1/donations/accounts/');
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/`);
                 if (res.ok) {
                     const data = await res.json();
                     setAccounts(data);

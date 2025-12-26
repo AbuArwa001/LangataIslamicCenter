@@ -34,7 +34,7 @@ export default function DonationForm() {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/donations/mpesa/stk-push/', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/mpesa/stk-push/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

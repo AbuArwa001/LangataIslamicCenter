@@ -20,7 +20,7 @@ export default function AdminDonations() {
     useEffect(() => {
         const fetchDonations = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/v1/donations/');
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/`);
                 if (res.ok) {
                     const data = await res.json();
                     setDonations(data);
@@ -70,8 +70,8 @@ export default function AdminDonations() {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{donation.transaction_id || '-'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${donation.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                                donation.status === 'failed' ? 'bg-red-100 text-red-800' :
-                                                    'bg-yellow-100 text-yellow-800'
+                                            donation.status === 'failed' ? 'bg-red-100 text-red-800' :
+                                                'bg-yellow-100 text-yellow-800'
                                             }`}>
                                             {donation.status}
                                         </span>

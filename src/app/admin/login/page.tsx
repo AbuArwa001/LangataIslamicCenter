@@ -16,7 +16,7 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const res = await fetch('http://localhost:8000/api/v1/users/login/', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export default function AdminLogin() {
                 localStorage.setItem('refreshToken', data.refresh);
 
                 // Verify if user is admin
-                const profileRes = await fetch('http://localhost:8000/api/v1/users/profile/', {
+                const profileRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile/`, {
                     headers: {
                         'Authorization': `Bearer ${data.access}`
                     }
