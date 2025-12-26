@@ -11,6 +11,7 @@ export default function DonationForm() {
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     // Goal calculation (Mock data based on FAQ: 324M total)
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const goalAmount = 324000000;
     const currentAmount = 2450000; // Mock current amount
     const progressPercentage = Math.min((currentAmount / goalAmount) * 100, 100);
@@ -34,7 +35,8 @@ export default function DonationForm() {
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/mpesa/stk-push/`, {
+            // console.log(`PUBLIC API URL: ${API_URL}`);
+            const response = await fetch(`${API_URL}/donations/mpesa/stk-push/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
