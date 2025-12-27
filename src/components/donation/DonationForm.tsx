@@ -2,6 +2,100 @@
 
 import { useState } from "react";
 import { Loader2, KeyRound, Phone, Coins, CheckCircle, AlertCircle, CreditCard } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLIC_KEY|| "");
+
+function StripeCardForm({ amount, email, onSuccess, projectId }: { amount: string, email: string, onSuccess: (msg: string) => void, projectId: string }) {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    // If stripe is null, it means the public key is likely missing or invalid
+    if (!stripePromise) {
+        return <div className="text-red-500 text-xs text-center">Stripe Configuration Missing</div>;
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        // Block submission if Stripe isn't loaded or amount is empty
+        if (!stripe || !elements) return;
+        if (!amount || parseFloat(amount) <= 0) {
+            setErrorMessage("Please enter a valid amount first.");
+            return;
+        }
+
+        setIsProcessing(true);
+        setErrorMessage(null);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/donations/initiate_payment/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    amount: amount,
+                    payment_method: "card",
+                    project: projectId, 
+                }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Server error");
+
+            const result = await stripe.confirmCardPayment(data.client_secret, {
+                payment_method: {
+                    card: elements.getElement(CardElement)!,
+                    billing_details: { email: email },
+                },
+            });
+
+            if (result.error) {
+                setErrorMessage(result.error.message || "Payment failed");
+            } else if (result.paymentIntent.status === "succeeded") {
+                onSuccess("Payment Successful!");
+            }
+        } catch (err: any) {
+            setErrorMessage(err.message);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="p-4 border border-slate-200 rounded-lg bg-white shadow-inner">
+                <CardElement 
+                    options={{ 
+                        style: { base: { fontSize: "16px", color: "#1e293b" } },
+                        hidePostalCode: true // Simplifies the UI for international donors
+                    }} 
+                />
+            </div>
+            
+            {errorMessage && (
+                <div className="bg-red-50 text-red-600 p-2 rounded text-xs flex items-center gap-2">
+                    <AlertCircle className="w-3 h-3" /> {errorMessage}
+                </div>
+            )}
+
+            <button
+                type="submit"
+                disabled={isProcessing || !stripe}
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2 disabled:bg-slate-300 disabled:cursor-not-allowed"
+            >
+                {isProcessing ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                    `Donate KES ${amount || '0'}`
+                )}
+            </button>
+        </form>
+    );
+}
 
 export default function DonationForm() {
     const [activeTab, setActiveTab] = useState<'mpesa' | 'card' | 'paypal'>('mpesa');
@@ -202,27 +296,29 @@ export default function DonationForm() {
                                 <p>Secure Card Payment</p>
                             </div>
 
-                            <form onSubmit={handleCardSubmit} className="space-y-4 opacity-60 pointer-events-none"> {/* Placeholder state */}
-                                <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700">Card Number</label>
-                                    <input type="text" placeholder="0000 0000 0000 0000" className="w-full px-4 py-3 border border-slate-200 rounded-lg" disabled />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-slate-700">Expiry</label>
-                                        <input type="text" placeholder="MM/YY" className="w-full px-4 py-3 border border-slate-200 rounded-lg" disabled />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-slate-700">CVC</label>
-                                        <input type="text" placeholder="123" className="w-full px-4 py-3 border border-slate-200 rounded-lg" disabled />
-                                    </div>
-                                </div>
-                                <button disabled className="w-full py-4 bg-slate-300 text-white font-bold rounded-lg cursor-not-allowed">
-                                    Pay with Card (Coming Soon)
-                                </button>
-                            </form>
-                            <p className="text-center text-xs text-emerald-600 font-medium mt-4">Card integration is currently being set up by the administrator.</p>
-                        </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <Coins className="w-4 h-4 text-emerald-600" /> Amount (KES)
+                                </label>
+                                <input
+                                    type="number"
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    placeholder="Amount to donate"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none"
+                                />
+                            </div>
+                            <Elements stripe={stripePromise}>
+                                <StripeCardForm
+                                    amount={amount}
+                                    email="donor@example.com"
+                                    onSuccess={() => setMessage({ type: 'success', text: 'Thank you! Your card donation was successful.' })} projectId={""}                                />
+                            </Elements>
+                            
+                            <p className="text-center text-[10px] text-slate-400">
+                                Protected by industry-standard SSL encryption.
+                            </p>
+                            </div>
                     )}
                     {activeTab === 'paypal' && (
                         <div className="space-y-6 py-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
