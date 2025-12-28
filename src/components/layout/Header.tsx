@@ -96,7 +96,7 @@ export default function Header() {
                           <div className="mx-auto w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#fdfdf8]"></div>
                           <div className="bg-[#fdfdf8] rounded-md shadow-2xl py-3 border border-gray-100">
                             <Link
-                              href="/about/story"
+                              href="/about"
                               className="block px-4 py-2 text-[14px] text-[#441A05] hover:text-[#FFC06E] font-bold text-center transition-colors"
                             >
                               Our Story

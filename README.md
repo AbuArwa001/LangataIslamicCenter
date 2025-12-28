@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Langata Islamic Center (LIC) - Frontend
 
-## Getting Started
+A modern, high-performance, and SEO-optimized web application for the Langata Islamic Center, built with Next.js 15.
 
-First, run the development server:
+## 🌟 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Dynamic Project Management**: Browse and support various community projects and campaigns.
+- **Multi-Provider Donation System**:
+  - **M-Pesa**: Integrated via Safaricom Daraja API (STK Push).
+  - **Paystack**: Seamless payment processing for cards and mobile money.
+  - **Stripe**: International payment support.
+  - **PayPal**: Global payment integration.
+  - **Bank Transfer**: Direct bank details for offline donations.
+- **SEO Optimized**:
+  - Server-Side Rendering (SSR) and React Server Components (RSC) for maximum indexability.
+  - Dynamic metadata generation for project pages.
+  - Optimized bundle size and minimal layout shift.
+- **Modern UI/UX**:
+  - Responsive design for all devices.
+  - Loading skeletons and streaming UI for perceived performance.
+  - Interactive elements powered by Lucide React and Framer Motion.
+- **Admin Dashboard**: Secure interface for managing donations, projects, and site content.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **State Management**: React Hooks & Server Components
+- **Authentication**: Firebase Authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18.x or later
+- npm or yarn
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/AbuArwa001/LangataIslamicCenter.git
+   cd LangataIslamicCenter
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Install dependencies:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add the following:
+
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   # Add other required keys
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+Open [http://www.langataislamiccenter.org](http://www.langataislamiccenter.org) with your browser to see the result.
+
+## 📁 Project Structure
+
+- `src/app`: Next.js App Router pages and layouts.
+- `src/components`: Reusable UI components (Home, Donation, Layout, etc.).
+- `src/lib`: Utility functions and API clients.
+- `src/data`: Static data and constants.
+- `public`: Static assets (images, icons, etc.).
+
+## 📜 License
+
+This project is licensed under the MIT License.
