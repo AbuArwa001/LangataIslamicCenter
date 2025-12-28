@@ -132,10 +132,11 @@ function StripeCardForm({
 }
 
 export default function DonationForm() {
-  const [activeTab, setActiveTab] = useState<"mpesa" | "card" | "paypal">(
-    "mpesa"
-  );
+  const [activeTab, setActiveTab] = useState<
+    "mpesa" | "card" | "paypal" | "paystack"
+  >("mpesa");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
@@ -222,6 +223,56 @@ export default function DonationForm() {
     });
   };
 
+  const handlePaystackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage(null);
+
+    if (!amount || parseFloat(amount) <= 0) {
+      setMessage({ type: "error", text: "Please enter a valid amount." });
+      setLoading(false);
+      return;
+    }
+    if (!email) {
+      setMessage({ type: "error", text: "Please enter your email address." });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/donations/initiate_payment/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: amount,
+          email: email,
+          payment_method: "paystack",
+          project: "77f8d229-bb22-49a1-8552-2306126b8346", // Default project ID
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.authorization_url) {
+        // Redirect to Paystack
+        window.location.href = data.authorization_url;
+      } else {
+        setMessage({
+          type: "error",
+          text: data.error || "Failed to initiate Paystack payment.",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage({
+        type: "error",
+        text: "An unexpected error occurred.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-lg mx-auto">
       {/* Progress Bar Section */}
@@ -263,10 +314,10 @@ export default function DonationForm() {
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-slate-100">
+        <div className="flex border-b border-slate-100 overflow-x-auto">
           <button
             onClick={() => setActiveTab("mpesa")}
-            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative ${
+            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative min-w-[80px] ${
               activeTab === "mpesa"
                 ? "text-emerald-600 bg-emerald-50/50"
                 : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
@@ -279,7 +330,7 @@ export default function DonationForm() {
           </button>
           <button
             onClick={() => setActiveTab("card")}
-            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative ${
+            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative min-w-[80px] ${
               activeTab === "card"
                 ? "text-emerald-600 bg-emerald-50/50"
                 : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
@@ -292,7 +343,7 @@ export default function DonationForm() {
           </button>
           <button
             onClick={() => setActiveTab("paypal")}
-            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative ${
+            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative min-w-[80px] ${
               activeTab === "paypal"
                 ? "text-emerald-600 bg-emerald-50/50"
                 : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
@@ -300,6 +351,19 @@ export default function DonationForm() {
           >
             Paypal
             {activeTab === "paypal" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600"></div>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab("paystack")}
+            className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative min-w-[80px] ${
+              activeTab === "paystack"
+                ? "text-emerald-600 bg-emerald-50/50"
+                : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            Paystack
+            {activeTab === "paystack" && (
               <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600"></div>
             )}
           </button>
@@ -537,6 +601,91 @@ export default function DonationForm() {
                 />
               </PayPalScriptProvider>
             </div>
+          )}
+
+          {activeTab === "paystack" && (
+            <form
+              onSubmit={handlePaystackSubmit}
+              className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 text-center text-slate-500 text-sm">
+                <CreditCard className="w-8 h-8 mx-auto mb-2 text-slate-400" />
+                <p>Secure Paystack Payment</p>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-slate-700 flex items-center gap-2"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="amount"
+                  className="text-sm font-semibold text-slate-700 flex items-center gap-2"
+                >
+                  <Coins className="w-4 h-4 text-emerald-600" /> Amount (KES)
+                </label>
+                <input
+                  type="number"
+                  id="amount"
+                  placeholder="e.g. 1000"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  min="1"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
+                  required
+                />
+              </div>
+
+              {message && (
+                <div
+                  className={`p-4 rounded-lg flex items-start gap-3 text-sm ${
+                    message.type === "success"
+                      ? "bg-emerald-50 text-emerald-800 border border-emerald-100"
+                      : "bg-red-50 text-red-800 border border-red-100"
+                  }`}
+                >
+                  {message.type === "success" ? (
+                    <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  )}
+                  <p>{message.text}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:shadow-emerald-600/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>Donate with Paystack</>
+                )}
+              </button>
+              <div className="flex items-center justify-center gap-2 text-xs text-slate-400 pt-2">
+                <KeyRound className="w-3 h-3" />
+                <span>Secured by Paystack</span>
+              </div>
+            </form>
           )}
         </div>
       </div>
