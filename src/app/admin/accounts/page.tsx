@@ -35,12 +35,18 @@ export default function AdminAccounts() {
   >({});
   const [loading, setLoading] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+  const [withdrawAccount, setWithdrawAccount] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchAccounts = async () => {
       try {
+        // FIXED: URL should be /accounts/ based on backend router configuration
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/`
+          `${process.env.NEXT_PUBLIC_API_URL}/accounts/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
         if (res.ok) {
           const data = await res.json();
@@ -61,8 +67,9 @@ export default function AdminAccounts() {
   const fetchBalance = async (id: string) => {
     try {
       const token = localStorage.getItem("accessToken");
+      // FIXED: URL should be /accounts/
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/${id}/balance/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/accounts/${id}/balance/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -84,8 +91,9 @@ export default function AdminAccounts() {
 
     try {
       const token = localStorage.getItem("accessToken");
+      // FIXED: URL should be /accounts/
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/donations/accounts/${id}/transactions/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/accounts/${id}/transactions/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -194,7 +202,10 @@ export default function AdminAccounts() {
                 >
                   Transactions
                 </button>
-                <button className="flex-1 bg-gray-50 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+                <button
+                  onClick={() => setWithdrawAccount(account.id)}
+                  className="flex-1 bg-gray-50 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                >
                   Withdraw
                 </button>
               </div>
@@ -263,6 +274,138 @@ export default function AdminAccounts() {
           </div>
         </div>
       )}
+
+      {/* Withdraw Modal */}
+      <WithdrawModal
+        isOpen={!!withdrawAccount}
+        onClose={() => setWithdrawAccount(null)}
+        account={accounts.find((a) => a.id === withdrawAccount) || null}
+      />
     </AdminLayout>
+  );
+}
+
+function WithdrawModal({
+  isOpen,
+  onClose,
+  account,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  account: Account | null;
+}) {
+  const [amount, setAmount] = useState("");
+  const [destination, setDestination] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (!isOpen || !account) return null;
+
+  const handleWithdraw = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/accounts/${account.id}/withdraw/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ amount: parseFloat(amount), destination }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Withdrawal initiated successfully!");
+        onClose();
+      } else {
+        alert(data.error || "Withdrawal failed");
+      }
+    } catch (error) {
+      console.error("Withdrawal error", error);
+      alert("An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl w-full max-w-md overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h3 className="text-xl font-bold">Withdraw Funds</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        </div>
+        <form onSubmit={handleWithdraw} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Amount
+            </label>
+            <input
+              type="number"
+              required
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00b17b]"
+              placeholder="0.00"
+            />
+          </div>
+
+          {account.account_type !== "card" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Destination{" "}
+                {account.account_type === "mpesa" ||
+                account.account_type === "paybill"
+                  ? "(Phone Number)"
+                  : "(Email)"}
+              </label>
+              <input
+                type="text"
+                required
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00b17b]"
+                placeholder={
+                  account.account_type === "mpesa" ||
+                  account.account_type === "paybill"
+                    ? "2547..."
+                    : "email@example.com"
+                }
+              />
+            </div>
+          )}
+
+          {account.account_type === "card" && (
+            <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+              Funds will be paid out to the default bank account connected to
+              your Stripe account.
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#00b17b] text-white py-3 rounded-xl font-bold hover:bg-[#009e6d] transition-colors disabled:opacity-50"
+          >
+            {loading ? "Processing..." : "Confirm Withdrawal"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
