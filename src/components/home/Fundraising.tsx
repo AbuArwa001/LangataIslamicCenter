@@ -1,14 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
-const images = ["/about_3.jpg", "/about_2.jpg"]; // Add your renders here
+const images = ["/about_3.jpg", "/about_2.jpg"];
 
 export default function Fundraising() {
+  const router = useRouter();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setIndex((i) => (i + 1) % images.length), 5000);
+    const timer = setInterval(
+      () => setIndex((i) => (i + 1) % images.length),
+      5000
+    );
     return () => clearInterval(timer);
   }, []);
 
@@ -27,26 +32,37 @@ export default function Fundraising() {
             <span className="text-[#00b17b]">FUNDRAISING PROGRESS</span>
           </h2>
           <p className="text-gray-600 italic mb-8 text-lg">
-            "Whoever builds a mosque for the sake of Allah, Allah will build for him a house in Paradise"
+            "Whoever builds a mosque for the sake of Allah, Allah will build for
+            him a house in Paradise"
           </p>
           <div className="mb-10">
             <p className="text-xl font-bold mb-4">
-              <span className="text-[#fbb03b]">KSh 1.01 million</span> 
+              <span className="text-[#fbb03b]">KSh 1.01 million</span>
               <span className="text-gray-400 font-normal"> of </span>
               <span className="text-[#c1272d]">KSh 315 million</span> raised
             </p>
             <div className="w-full bg-gray-200 h-6 rounded-full overflow-hidden shadow-inner">
-              <motion.div 
+              <motion.div
                 initial={{ width: 0 }}
-                whileInView={{ width: "1%" }} 
+                whileInView={{ width: "1%" }}
                 transition={{ duration: 2 }}
                 className="bg-[#00b17b] h-full"
               />
             </div>
           </div>
           <div className="flex gap-4">
-            <button className="bg-[#00b17b] text-white px-10 py-3 rounded-2xl font-bold">Donate</button>
-            <button className="bg-[#fbb03b] text-white px-10 py-3 rounded-2xl font-bold">Learn More</button>
+            <button
+              onClick={() => router.push("/donate")}
+              className="bg-[#00b17b] text-white px-10 py-3 rounded-2xl font-bold"
+            >
+              Donate
+            </button>
+            <button
+              onClick={() => router.push("/about")}
+              className="bg-[#fbb03b] text-white px-10 py-3 rounded-2xl font-bold"
+            >
+              Learn More
+            </button>
           </div>
         </motion.div>
 
