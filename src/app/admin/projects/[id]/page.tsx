@@ -2,6 +2,7 @@
 import AdminLayout from "@/components/admin/AdminLayout";
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
+import TiptapEditor from "@/components/admin/TiptapEditor";
 
 export default function ProjectForm({
   params,
@@ -145,21 +146,18 @@ export default function ProjectForm({
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00b17b] focus:border-transparent outline-none transition-all"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00b17b] focus:border-transparent outline-none transition-all"
+            <TiptapEditor
+              content={formData.description}
+              onChange={(content) =>
+                setFormData({ ...formData, description: content })
+              }
+              placeholder="Describe the project goals, impact, and details..."
             />
           </div>
-
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -190,7 +188,6 @@ export default function ProjectForm({
               </select>
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -218,7 +215,6 @@ export default function ProjectForm({
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Images
@@ -234,7 +230,6 @@ export default function ProjectForm({
               Select multiple images to upload.
             </p>
           </div>
-
           <div className="pt-4">
             <button
               type="submit"

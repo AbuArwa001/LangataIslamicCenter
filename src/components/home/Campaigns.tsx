@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { stripHtml } from "@/lib/htmlUtils";
 
 interface Project {
   id: string;
@@ -71,7 +72,9 @@ export default async function Campaigns() {
                   {project.name}
                 </h3>
                 <p className="text-gray-600 mb-8 line-clamp-3 flex-grow">
-                  {project.description}
+                  {project.description?.startsWith("<")
+                    ? stripHtml(project.description)
+                    : project.description || ""}
                 </p>
                 <Link
                   href={`/projects/${project.id}`}

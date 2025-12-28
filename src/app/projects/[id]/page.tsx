@@ -32,10 +32,10 @@ export async function generateMetadata({
 
     return {
       title: `${project.name} | Langata Islamic Center`,
-      description: project.description.substring(0, 160),
+      description: project.description?.substring(0, 160) || "",
       openGraph: {
         title: project.name,
-        description: project.description.substring(0, 160),
+        description: project.description?.substring(0, 160) || "",
         images: project.image ? [project.image] : ["/logo.png"],
       },
     };
@@ -119,8 +119,16 @@ export default async function SingleProjectPage({
             </div>
 
             {/* Description */}
-            <div className="prose prose-lg max-w-none text-[#5c4033] leading-relaxed whitespace-pre-wrap">
-              {project.description}
+            <div className="prose prose-lg max-w-none text-[#5c4033] leading-relaxed">
+              {project.description?.startsWith("<") ? (
+                <div
+                  dangerouslySetInnerHTML={{ __html: project.description }}
+                />
+              ) : (
+                <div className="whitespace-pre-wrap">
+                  {project.description || ""}
+                </div>
+              )}
             </div>
           </div>
 
