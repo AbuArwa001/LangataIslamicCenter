@@ -131,7 +131,7 @@ function StripeCardForm({
   );
 }
 
-export default function DonationForm() {
+export default function DonationForm({ projectId }: { projectId?: string }) {
   const [activeTab, setActiveTab] = useState<
     "mpesa" | "card" | "paypal" | "paystack"
   >("mpesa");
@@ -175,7 +175,6 @@ export default function DonationForm() {
     }
 
     try {
-      // console.log(`PUBLIC API URL: ${API_URL}`);
       const response = await fetch(`${API_URL}/donations/mpesa/stk-push/`, {
         method: "POST",
         headers: {
@@ -185,6 +184,7 @@ export default function DonationForm() {
           phone_number: formattedPhone,
           amount: parseInt(amount),
           account_reference: "Langata Islamic Center",
+          project: projectId,
         }),
       });
 
@@ -214,15 +214,6 @@ export default function DonationForm() {
     }
   };
 
-  const handleCardSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Placeholder for Card logic
-    setMessage({
-      type: "success",
-      text: "Card payment integration coming soon.",
-    });
-  };
-
   const handlePaystackSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -247,7 +238,7 @@ export default function DonationForm() {
           amount: amount,
           email: email,
           payment_method: "paystack",
-          project: "77f8d229-bb22-49a1-8552-2306126b8346", // Default project ID
+          project: projectId,
         }),
       });
 
@@ -275,33 +266,35 @@ export default function DonationForm() {
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      {/* Progress Bar Section */}
-      <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-        <div className="flex justify-between items-end mb-2">
-          <div>
-            <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-              Raised so far
-            </h4>
-            <p className="text-2xl font-bold text-slate-900">
-              KES {currentAmount.toLocaleString()}
-            </p>
+      {!projectId && (
+        /* Progress Bar Section - Only show on main donation page */
+        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <div className="flex justify-between items-end mb-2">
+            <div>
+              <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                Raised so far
+              </h4>
+              <p className="text-2xl font-bold text-slate-900">
+                KES {currentAmount.toLocaleString()}
+              </p>
+            </div>
+            <div className="text-right">
+              <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                {progressPercentage.toFixed(2)}% of Goal
+              </span>
+            </div>
           </div>
-          <div className="text-right">
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-              {progressPercentage.toFixed(2)}% of Goal
-            </span>
+          <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
           </div>
+          <p className="text-xs text-slate-400 mt-2 text-right">
+            Goal: KES {goalAmount.toLocaleString()}
+          </p>
         </div>
-        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-          <div
-            className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-1000 ease-out"
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
-        </div>
-        <p className="text-xs text-slate-400 mt-2 text-right">
-          Goal: KES {goalAmount.toLocaleString()}
-        </p>
-      </div>
+      )}
 
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
         {/* Header */}
@@ -309,7 +302,9 @@ export default function DonationForm() {
           <div className="absolute inset-0 bg-emerald-600/10 pointer-events-none"></div>
           <h3 className="text-2xl font-bold relative z-10">Make a Donation</h3>
           <p className="text-slate-300 text-sm mt-1 relative z-10">
-            Support the construction of the Langata Islamic Center
+            {projectId
+              ? "Support this specific project"
+              : "Support the construction of the Langata Islamic Center"}
           </p>
         </div>
 
@@ -480,7 +475,7 @@ export default function DonationForm() {
                       text: "Thank you! Your card donation was successful.",
                     })
                   }
-                  projectId={""}
+                  projectId={projectId || ""}
                 />
               </Elements>
 
@@ -529,7 +524,7 @@ export default function DonationForm() {
                           body: JSON.stringify({
                             amount: amount,
                             payment_method: "paypal",
-                            project: "77f8d229-bb22-49a1-8552-2306126b8346",
+                            project: projectId,
                           }),
                         }
                       );

@@ -57,6 +57,8 @@ export async function generateStaticParams() {
   }
 }
 
+import DonationModal from "@/components/donation/DonationModal";
+
 export default async function SingleProjectPage({
   params,
 }: {
@@ -75,16 +77,12 @@ export default async function SingleProjectPage({
     notFound();
   }
 
-  // Calculate progress safely
-  // Calculate progress safely
   const progress =
     project.progress_percentage ??
     (project.goal_amount
       ? (project.current_amount / project.goal_amount) * 100
       : 0);
   const raisedAmount = project.total_donated ?? project.current_amount;
-
-  // Fallback image
   const image = project.image || "/about_1.jpg";
 
   return (
@@ -121,25 +119,8 @@ export default async function SingleProjectPage({
             </div>
 
             {/* Description */}
-            <div className="prose prose-lg max-w-none text-[#5c4033] leading-relaxed">
-              <p>{project.description}</p>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae
-                vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-                voluptas sit aspernatur aut odit aut fugit, sed quia
-                consequuntur magni dolores eos qui ratione voluptatem sequi
-                nesciunt.
-              </p>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-                consectetur, adipisci velit, sed quia non numquam eius modi
-                tempora incidunt ut labore et dolore magnam aliquam quaerat
-                voluptatem. Ut enim ad minima veniam, quis nostrum
-                exercitationem ullam corporis suscipit laboriosam, nisi ut
-                aliquid ex ea commodi consequatur?
-              </p>
+            <div className="prose prose-lg max-w-none text-[#5c4033] leading-relaxed whitespace-pre-wrap">
+              {project.description}
             </div>
           </div>
 
@@ -186,13 +167,16 @@ export default async function SingleProjectPage({
                 </div>
               </div>
 
-              <Link
-                href="/donate"
-                className="block w-full bg-[#00b17b] hover:bg-[#009e6d] text-white text-center py-4 rounded-xl font-bold text-lg transition-colors shadow-md hover:shadow-lg flex items-center justify-center"
-              >
-                <HandHeart className="w-5 h-5 mr-2" />
-                Donate Now
-              </Link>
+              <DonationModal
+                projectId={project.id}
+                projectName={project.name}
+                trigger={
+                  <button className="block w-full bg-[#00b17b] hover:bg-[#009e6d] text-white text-center py-4 rounded-xl font-bold text-lg transition-colors shadow-md hover:shadow-lg flex items-center justify-center">
+                    <HandHeart className="w-5 h-5 mr-2" />
+                    Donate Now
+                  </button>
+                }
+              />
 
               <div className="bg-orange-50 rounded-xl p-4 text-sm text-[#5c4033]">
                 <p className="font-medium mb-1">Why donate?</p>
