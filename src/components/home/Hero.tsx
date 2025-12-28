@@ -1,9 +1,6 @@
-"use client";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import HeroClient from "./HeroClient";
 
 export default function Hero() {
-  const router = useRouter();
   return (
     <section className="relative h-[90vh] flex items-center justify-center text-white overflow-hidden font-serif">
       {/* Background Image Container */}
@@ -16,11 +13,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 text-center px-4">
-        <motion.div
-          initial={{ y: -80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
+        <div>
           {/* Brand Colors applied here */}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-2">
             <span className="text-[#FFC06E]">LANGATA</span>{" "}
@@ -36,28 +29,9 @@ export default function Hero() {
           <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto">
             <strong>Build Langata Mosque: A Beacon of Faith & Education</strong>
           </p>
-        </motion.div>
-
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <motion.button
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="bg-[#00b17b] hover:bg-[#009668] px-14 py-4 rounded-full font-bold text-lg shadow-xl"
-            onClick={() => router.push("/donate")}
-          >
-            Donate
-          </motion.button>
-
-          <motion.button
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="bg-[#FFC06E] hover:bg-[#eeb160] text-[#441A05] px-14 py-4 rounded-full font-bold text-lg shadow-xl"
-          >
-            Learn More
-          </motion.button>
         </div>
+
+        <HeroClient />
       </div>
 
       {/* --- MOUNTAIN SHAPE DIVIDER --- */}

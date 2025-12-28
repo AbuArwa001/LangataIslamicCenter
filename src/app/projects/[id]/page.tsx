@@ -18,6 +18,32 @@ interface Project {
   progress_percentage?: number;
 }
 
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const project = await fetchProject(id);
+    if (!project) return { title: "Project Not Found" };
+
+    return {
+      title: `${project.name} | Langata Islamic Center`,
+      description: project.description.substring(0, 160),
+      openGraph: {
+        title: project.name,
+        description: project.description.substring(0, 160),
+        images: project.image ? [project.image] : ["/logo.png"],
+      },
+    };
+  } catch (e) {
+    return { title: "Project | Langata Islamic Center" };
+  }
+}
+
 export async function generateStaticParams() {
   try {
     const projects = await fetchProjects();

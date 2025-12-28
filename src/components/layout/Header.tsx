@@ -27,69 +27,94 @@ export default function Header() {
   return (
     <header className="bg-[#0f0f0f] text-white py-4 md:py-6 sticky top-0 z-50 border-b border-white/5 font-serif">
       <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-
         {/* Mobile Logo / Brand */}
         <div className="md:hidden">
-          <Link href="/" className="text-[#FFC06E] font-bold text-lg tracking-wider">
+          <Link
+            href="/"
+            className="text-[#FFC06E] font-bold text-lg tracking-wider"
+          >
             LANGATA <span className="text-white">MOSQUE</span>
           </Link>
         </div>
 
         {/* Desktop Navigation - Hidden on Mobile */}
         <div className="hidden md:flex space-x-8 items-center mx-auto">
-          {navLinks.filter(link => link.name !== "Donate").map((link) => {
-            const isActive = pathname === link.href;
-            const isHighlighted = isActive || (link.name === "About Us" && isAboutHovered);
+          {navLinks
+            .filter((link) => link.name !== "Donate")
+            .map((link) => {
+              const isActive = pathname === link.href;
+              const isHighlighted =
+                isActive || (link.name === "About Us" && isAboutHovered);
 
-            return (
-              <div
-                key={link.name}
-                className="relative"
-                onMouseEnter={() => link.hasDropdown && setIsAboutHovered(true)}
-                onMouseLeave={() => link.hasDropdown && setIsAboutHovered(false)}
-              >
-                <Link
-                  href={link.href}
-                  className={`text-[15px] font-medium transition-all duration-300 relative pb-1 flex items-center gap-1 ${isHighlighted ? "text-[#FFC06E]" : "text-white hover:text-[#FFC06E]"
-                    }`}
+              return (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={() =>
+                    link.hasDropdown && setIsAboutHovered(true)
+                  }
+                  onMouseLeave={() =>
+                    link.hasDropdown && setIsAboutHovered(false)
+                  }
                 >
-                  {link.name}
-                  {link.hasDropdown && <ChevronDown size={14} className={`mt-0.5 transition-transform ${isAboutHovered ? 'rotate-180' : ''}`} />}
-
-                  {isHighlighted && (
-                    <motion.div
-                      layoutId="navUnderline"
-                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] bg-[#FFC06E]"
-                    />
-                  )}
-                </Link>
-
-                {/* Dropdown Menu - Desktop */}
-                {link.hasDropdown && (
-                  <AnimatePresence>
-                    {isAboutHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 5 }}
-                        className="absolute left-1/2 -translate-x-1/2 top-full pt-4 w-44"
-                      >
-                        <div className="mx-auto w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#fdfdf8]"></div>
-                        <div className="bg-[#fdfdf8] rounded-md shadow-2xl py-3 border border-gray-100">
-                          <Link href="/about/" className="block px-4 py-2 text-[14px] text-[#441A05] hover:text-[#FFC06E] font-bold text-center transition-colors">
-                            Our Story
-                          </Link>
-                          <Link href="/faqs" className="block px-4 py-2 text-[14px] text-[#441A05] hover:text-[#FFC06E] font-bold text-center transition-colors">
-                            FAQs
-                          </Link>
-                        </div>
-                      </motion.div>
+                  <Link
+                    href={link.href}
+                    className={`text-[15px] font-medium transition-all duration-300 relative pb-1 flex items-center gap-1 ${
+                      isHighlighted
+                        ? "text-[#FFC06E]"
+                        : "text-white hover:text-[#FFC06E]"
+                    }`}
+                  >
+                    {link.name}
+                    {link.hasDropdown && (
+                      <ChevronDown
+                        size={14}
+                        className={`mt-0.5 transition-transform ${
+                          isAboutHovered ? "rotate-180" : ""
+                        }`}
+                      />
                     )}
-                  </AnimatePresence>
-                )}
-              </div>
-            );
-          })}
+
+                    {isHighlighted && (
+                      <motion.div
+                        layoutId="navUnderline"
+                        className="absolute -bottom-1 left-0 right-0 h-[2.5px] bg-[#FFC06E]"
+                      />
+                    )}
+                  </Link>
+
+                  {/* Dropdown Menu - Desktop */}
+                  {link.hasDropdown && (
+                    <AnimatePresence>
+                      {isAboutHovered && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 5 }}
+                          className="absolute left-1/2 -translate-x-1/2 top-full pt-4 w-44"
+                        >
+                          <div className="mx-auto w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#fdfdf8]"></div>
+                          <div className="bg-[#fdfdf8] rounded-md shadow-2xl py-3 border border-gray-100">
+                            <Link
+                              href="/about/story"
+                              className="block px-4 py-2 text-[14px] text-[#441A05] hover:text-[#FFC06E] font-bold text-center transition-colors"
+                            >
+                              Our Story
+                            </Link>
+                            <Link
+                              href="/faqs"
+                              className="block px-4 py-2 text-[14px] text-[#441A05] hover:text-[#FFC06E] font-bold text-center transition-colors"
+                            >
+                              FAQs
+                            </Link>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
+              );
+            })}
 
           {/* Donate Button - Desktop */}
           <Link
@@ -131,14 +156,24 @@ export default function Header() {
                   <div className="flex justify-between items-center">
                     <Link
                       href={link.href}
-                      className={`text-xl font-bold ${pathname === link.href ? 'text-[#FFC06E]' : 'text-white'}`}
-                      onClick={() => !link.hasDropdown && setMobileMenuOpen(false)}
+                      className={`text-xl font-bold ${
+                        pathname === link.href ? "text-[#FFC06E]" : "text-white"
+                      }`}
+                      onClick={() =>
+                        !link.hasDropdown && setMobileMenuOpen(false)
+                      }
                     >
                       {link.name}
                     </Link>
                     {link.hasDropdown && (
-                      <button onClick={() => setMobileAboutOpen(!mobileAboutOpen)}>
-                        <ChevronDown className={`text-[#FFC06E] transition-transform ${mobileAboutOpen ? 'rotate-180' : ''}`} />
+                      <button
+                        onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                      >
+                        <ChevronDown
+                          className={`text-[#FFC06E] transition-transform ${
+                            mobileAboutOpen ? "rotate-180" : ""
+                          }`}
+                        />
                       </button>
                     )}
                   </div>
@@ -150,8 +185,20 @@ export default function Header() {
                       animate={{ height: "auto", opacity: 1 }}
                       className="ml-4 mt-4 flex flex-col space-y-4 border-l-2 border-[#FFC06E]/30 pl-4"
                     >
-                      <Link href="/about/story" className="text-gray-300 text-lg">Our Story</Link>
-                      <Link href="/about/faqs" className="text-gray-300 text-lg">FAQs</Link>
+                      <Link
+                        href="/about/story"
+                        className="text-gray-300 text-lg"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Our Story
+                      </Link>
+                      <Link
+                        href="/faqs"
+                        className="text-gray-300 text-lg"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        FAQs
+                      </Link>
                     </motion.div>
                   )}
                 </div>

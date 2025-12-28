@@ -1,68 +1,6 @@
-"use client";
-
-import { motion, Variants } from "framer-motion";
-import { useState } from "react";
-import AboutModal from "@/components/about/AboutModal";
+import ReadMoreButton from "@/components/about/ReadMoreButton";
 
 export default function About() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Animation Variants
-  const fadeInUp: Variants = {
-    hidden: { opacity: 0, y: 60 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const fadeInScale: Variants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  const slideInLeft: Variants = {
-    hidden: { opacity: 0, x: -60 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const slideInRight: Variants = {
-    hidden: { opacity: 0, x: 60 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const staggerContainer: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -74,14 +12,9 @@ export default function About() {
         </div>
 
         <div className="relative z-10 text-center">
-          <motion.h1
-            initial="hidden"
-            animate="visible"
-            variants={fadeInScale}
-            className="text-6xl md:text-7xl font-serif text-[#eebb75] tracking-wide drop-shadow-lg"
-          >
+          <h1 className="text-6xl md:text-7xl font-serif text-[#eebb75] tracking-wide drop-shadow-lg">
             About Us
-          </motion.h1>
+          </h1>
         </div>
       </div>
 
@@ -89,13 +22,7 @@ export default function About() {
       <div className="container mx-auto px-4 py-20 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Column: Text Content */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={slideInLeft}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             <h2 className="text-5xl font-serif text-[#1e293b] mb-8">
               About Us
             </h2>
@@ -156,24 +83,11 @@ export default function About() {
               </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsModalOpen(true)}
-              className="bg-[#2ca082] hover:bg-[#238a6f] text-white px-8 py-3 rounded-full font-medium transition-colors shadow-lg hover:shadow-xl mt-4"
-            >
-              Read More
-            </motion.button>
-          </motion.div>
+            <ReadMoreButton />
+          </div>
 
           {/* Right Column: Image */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={slideInRight}
-            className="relative h-full min-h-[600px] w-full bg-slate-100 rounded-lg overflow-hidden shadow-2xl"
-          >
+          <div className="relative h-full min-h-[600px] w-full bg-slate-100 rounded-lg overflow-hidden shadow-2xl">
             {/* Placeholder for the Building Render */}
             <div className="absolute inset-0 flex items-center justify-center text-slate-400 bg-slate-200">
               <img
@@ -182,18 +96,12 @@ export default function About() {
                 className="w-full h-full object-cover"
               />
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Mission Section */}
         <div className="grid lg:grid-cols-2 gap-16 items-center py-12">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={slideInLeft}
-            className="relative h-[400px] w-full bg-slate-100 rounded-sm overflow-hidden"
-          >
+          <div className="relative h-[400px] w-full bg-slate-100 rounded-sm overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center text-slate-400 bg-slate-200">
               {/* Placeholder for Mission Image (Aerial View) */}
               <img
@@ -202,14 +110,8 @@ export default function About() {
                 className="w-full h-full object-cover"
               />
             </div>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={slideInRight}
-            className="space-y-6"
-          >
+          </div>
+          <div className="space-y-6">
             <h2 className="text-5xl font-serif text-[#0f172a] mb-4">
               Our Mission
             </h2>
@@ -217,18 +119,12 @@ export default function About() {
               To nurture a God-fearing community through spiritual growth,
               education, and social empowerment
             </p>
-          </motion.div>
+          </div>
         </div>
 
         {/* Vision Section */}
         <div className="grid lg:grid-cols-2 gap-16 items-center py-12">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={slideInLeft}
-            className="space-y-6 lg:order-1 order-2"
-          >
+          <div className="space-y-6 lg:order-1 order-2">
             <h2 className="text-5xl font-serif text-[#0f172a] mb-4">
               Vision Statement
             </h2>
@@ -236,14 +132,8 @@ export default function About() {
               To establish a leading Islamic Center that inspires generations
               through worship, learning, and sustainable development.
             </p>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={slideInRight}
-            className="relative h-[500px] w-full bg-slate-100 rounded-sm overflow-hidden lg:order-2 order-1"
-          >
+          </div>
+          <div className="relative h-[500px] w-full bg-slate-100 rounded-sm overflow-hidden lg:order-2 order-1">
             <div className="absolute inset-0 flex items-center justify-center text-slate-400 bg-slate-200">
               {/* Placeholder for Vision Image (Building Side View) */}
               <img
@@ -252,37 +142,25 @@ export default function About() {
                 className="w-full h-full object-cover"
               />
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Meet The Team Section */}
         <div className="pt-12">
           <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <div>
               <h4 className="text-xs font-bold tracking-[0.2em] text-slate-500 uppercase mb-3">
                 Meet the Team
               </h4>
               <h2 className="text-4xl md:text-5xl font-serif font-medium text-slate-900">
                 Powered by our people
               </h2>
-            </motion.div>
+            </div>
           </div>
 
           <div className="space-y-16">
             {/* Chairman Card */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-              whileHover={{ y: -10, transition: { duration: 0.3 } }}
-              className="max-w-3xl mx-auto bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
-            >
+            <div className="max-w-3xl mx-auto bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
               <div className="bg-slate-300 h-80 relative overflow-hidden">
                 {/* Wave Pattern SVG */}
                 <div className="absolute inset-0 opacity-30">
@@ -307,26 +185,18 @@ export default function About() {
                   Chairman, LIWO Mosque Board
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Other Team Members Grid */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { name: "Juma Abdallah", role: "Treasurer" }, // Corrected "Treasure" to "Treasurer"
-                { name: "Osman Ali", role: "Vice Treasurer" }, // Corrected "Vice treasure"
-                { name: "Abubakar Hussein", role: "Assistant Secretary" }, // Corrected "Ass Secretary"
+                { name: "Juma Abdallah", role: "Treasurer" },
+                { name: "Osman Ali", role: "Vice Treasurer" },
+                { name: "Abubakar Hussein", role: "Assistant Secretary" },
                 { name: "Abdullahi Abdi", role: "Organising Secretary" },
               ].map((member, index) => (
-                <motion.div
+                <div
                   key={index}
-                  variants={cardVariants}
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
                 >
                   <div className="bg-slate-300 h-64 relative overflow-hidden">
@@ -349,13 +219,12 @@ export default function About() {
                       {member.role}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-      <AboutModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

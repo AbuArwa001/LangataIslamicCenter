@@ -2,6 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Users, Heart, Share2, User } from "lucide-react";
 import { fetchProjects } from "@/lib/api";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Our Projects | Langata Islamic Center",
+  description:
+    "Explore our ongoing projects and initiatives to build the future of our community.",
+};
 
 // Define interface for Project
 interface Project {
