@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AboutSection() {
   return (
     <section className="relative py-24 text-white overflow-hidden">
@@ -25,9 +27,12 @@ export default function AboutSection() {
               Servants, Uhuru Gardens, etc.
             </p>
           </div>
-          <button className="mt-8 bg-[#fbb03b] text-gray-900 px-10 py-3 rounded-full font-bold">
+          <Link
+            href="/about"
+            className="mt-8 inline-block bg-[#fbb03b] text-gray-900 px-10 py-3 rounded-full font-bold text-center transition-colors hover:bg-[#e6a035]"
+          >
             Learn More
-          </button>
+          </Link>
         </div>
 
         {/* Hover Effect on Image - using CSS hover instead of motion */}
