@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProjectGallery from "@/components/projects/ProjectGallery";
+import ProjectDescription from "@/components/projects/ProjectDescription";
 
 // Define interface for Project
 interface Project {
@@ -119,19 +120,8 @@ export default async function SingleProjectPage({
               <span>•</span>
               <span>{project.start_date}</span>
             </div>
-
             {/* Description */}
-            <div className="prose prose-lg max-w-none text-[#5c4033] leading-relaxed">
-              {project.description?.startsWith("<") ? (
-                <div
-                  dangerouslySetInnerHTML={{ __html: project.description }}
-                />
-              ) : (
-                <div className="whitespace-pre-wrap">
-                  {project.description || ""}
-                </div>
-              )}
-            </div>
+            <ProjectDescription description={project.description} />
           </div>
 
           {/* Sidebar / Donation Section */}
