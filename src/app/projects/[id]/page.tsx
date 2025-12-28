@@ -3,6 +3,7 @@ import { User, HandHeart, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ProjectGallery from "@/components/projects/ProjectGallery";
 
 // Define interface for Project
 interface Project {
@@ -14,6 +15,7 @@ interface Project {
   current_amount: number;
   status: string;
   image: string | null;
+  images: { id: number; image: string }[];
   total_donated?: number;
   progress_percentage?: number;
 }
@@ -196,29 +198,12 @@ export default async function SingleProjectPage({
             </div>
           </div>
         </div>
-
         {/* Gallery Section */}
         <div className="space-y-8 pt-12 border-t mt-12">
           <h3 className="text-3xl font-bold text-center text-[#3d2616] font-serif">
             Project Gallery
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {["/about_1.jpg", "/about_2.jpg", "/about_3.jpg"].map(
-              (img, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-square rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                >
-                  <Image
-                    src={img}
-                    alt={`Gallery image ${index + 1}`}
-                    fill
-                    className="object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              )
-            )}
-          </div>
+          <ProjectGallery images={project.images} projectName={project.name} />
         </div>
       </div>
     </div>
