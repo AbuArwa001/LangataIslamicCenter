@@ -1,14 +1,14 @@
 // components/donation/DonationTabs.tsx
-import { DonationTab } from "./types";
+import { PaymentTab } from "./types";
 
 export function DonationTabs({
   activeTab,
   onChange,
 }: {
-  activeTab: DonationTab;
-  onChange: (tab: DonationTab) => void;
+  activeTab: PaymentTab;
+  onChange: (tab: PaymentTab) => void;
 }) {
-  const tabs: DonationTab[] = ["mpesa", "card", "paypal", "paystack"];
+  const tabs: PaymentTab[] = ["mpesa", "card", "paypal", "paystack"];
 
   return (
     <div className="flex border-b">
