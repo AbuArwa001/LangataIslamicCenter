@@ -19,7 +19,7 @@ export default function MpesaQuickDonation() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/donations/mpesa/stk-push/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/mpesa/stk-push/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

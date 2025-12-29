@@ -175,7 +175,7 @@ export default function DonationForm({ projectId }: { projectId?: string }) {
     }
 
     try {
-      const response = await fetch(`${API_URL}/donations/mpesa/stk-push/`, {
+      const response = await fetch(`${API_URL}/mpesa/stk-push/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
