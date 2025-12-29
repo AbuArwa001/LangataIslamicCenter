@@ -21,7 +21,7 @@ interface Project {
   progress_percentage?: number;
 }
 
-import { Metadata } from "next";
+import { stripHtml } from "@/lib/htmlUtils";
 
 export async function generateMetadata({
   params,
@@ -33,12 +33,14 @@ export async function generateMetadata({
     const project = await fetchProject(id);
     if (!project) return { title: "Project Not Found" };
 
+    const cleanDescription = stripHtml(project.description || "");
+
     return {
       title: `${project.name} | Langata Islamic Center`,
-      description: project.description?.substring(0, 160) || "",
+      description: cleanDescription.substring(0, 160),
       openGraph: {
         title: project.name,
-        description: project.description?.substring(0, 160) || "",
+        description: cleanDescription.substring(0, 160),
         images: project.image ? [project.image] : ["/logo.png"],
       },
     };

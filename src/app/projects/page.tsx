@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Users, Heart, Share2, User } from "lucide-react";
 import { fetchProjects } from "@/lib/api";
+import { stripHtml } from "@/lib/htmlUtils";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -98,7 +99,7 @@ export default async function ProjectsPage() {
                   {featuredProject.name}
                 </h3>
                 <p className="text-gray-300 text-lg line-clamp-2">
-                  {featuredProject.description}
+                  {stripHtml(featuredProject.description)}
                 </p>
                 <div className="pt-4 flex items-center text-white font-bold text-sm tracking-wide uppercase">
                   View Details{" "}
@@ -160,7 +161,7 @@ export default async function ProjectsPage() {
                   </div>
 
                   <p className="text-[#5c4033] mb-6 line-clamp-3 leading-relaxed flex-grow">
-                    {project.description}
+                    {stripHtml(project.description)}
                   </p>
 
                   <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-sm font-medium text-[#3d2616]">
