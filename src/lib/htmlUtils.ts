@@ -1,4 +1,5 @@
-export function stripHtml(html: string): string {
+export function stripHtml(html: string | null | undefined): string {
+  if (!html) return "";
   if (typeof window === "undefined") {
     // Server-side: simple regex to strip tags
     return html.replace(/<[^>]*>?/gm, "");

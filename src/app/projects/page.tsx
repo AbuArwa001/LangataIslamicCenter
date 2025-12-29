@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// Projects page is now static by default, revalidated on demand via tags
 
 import Link from "next/link";
 import Image from "next/image";
@@ -101,7 +101,7 @@ export default async function ProjectsPage() {
                   {featuredProject.name}
                 </h3>
                 <p className="text-gray-300 text-lg line-clamp-2">
-                  {stripHtml(featuredProject.description)}
+                  {stripHtml(featuredProject?.description || "")}
                 </p>
                 <div className="pt-4 flex items-center text-white font-bold text-sm tracking-wide uppercase">
                   View Details{" "}
@@ -163,7 +163,7 @@ export default async function ProjectsPage() {
                   </div>
 
                   <p className="text-[#5c4033] mb-6 line-clamp-3 leading-relaxed flex-grow">
-                    {stripHtml(project.description)}
+                    {stripHtml(project?.description || "")}
                   </p>
 
                   <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-sm font-medium text-[#3d2616]">

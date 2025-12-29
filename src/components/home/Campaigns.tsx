@@ -16,7 +16,7 @@ interface Project {
 async function getProject(): Promise<Project | null> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/`, {
-      cache: "no-store",
+      next: { tags: ["projects"] },
     });
     if (!res.ok) return null;
     const data = await res.json();

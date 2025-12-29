@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// Main home page is now static by default, revalidated on demand via tags in components
 
 import Hero from "@/components/home/Hero";
 import AboutSection from "@/components/home/AboutSection";

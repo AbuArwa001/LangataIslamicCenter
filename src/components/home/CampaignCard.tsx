@@ -79,7 +79,7 @@ export default function CampaignCard({ project }: { project: Project }) {
           </div>
           <h3 className="text-3xl font-bold mb-4">{project.name}</h3>
           <p className="text-gray-600 mb-8 line-clamp-4 flex-grow bg-white/50">
-            {stripHtml(project.description)}
+            {stripHtml(project?.description)}
           </p>
 
           <div className="mb-8">

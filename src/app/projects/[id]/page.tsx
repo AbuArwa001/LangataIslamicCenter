@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// Project detail page is now static by default, revalidated on demand via tags
 import { fetchProjects, fetchProject } from "@/lib/api";
 import { User, HandHeart, Users } from "lucide-react";
 import Image from "next/image";
