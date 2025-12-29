@@ -4,13 +4,25 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchProjects } from "@/lib/api";
 
 export default function Header() {
   const pathname = usePathname();
   const [isAboutHovered, setIsAboutHovered] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
 
+  useEffect(() => {
+    // Fetch projects on mount
+    const getProjects = async () => {
+      const data = await fetchProjects().catch(() => []);
+      setProjects(data);
+    };
+    getProjects();
+  }, []);
+  const firstProject = projects && projects.length > 0 ? projects[0] : null;
+  
   // Close mobile menu when path changes
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -118,7 +130,7 @@ export default function Header() {
 
           {/* Donate Button - Desktop */}
           <Link
-            href="/donate"
+            href={`/donate/?project=${firstProject ? firstProject.id : ''}`}
             className="bg-[#00b17b] hover:bg-[#009e6d] text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
           >
             Donate Now
