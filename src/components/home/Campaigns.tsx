@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { stripHtml } from "@/lib/htmlUtils";
 
@@ -12,7 +13,7 @@ interface Project {
 async function getProjects(): Promise<Project[]> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const data = await res.json();

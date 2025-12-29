@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { fetchProjects, fetchProject } from "@/lib/api";
 import { User, HandHeart, Users } from "lucide-react";
 import Image from "next/image";
@@ -52,7 +53,8 @@ export async function generateMetadata({
 export async function generateStaticParams() {
   try {
     const projects = await fetchProjects();
-    console.log(projects);
+    // console.log(projects);
+    if (!Array.isArray(projects)) return [];
     return projects.map((project: Project) => ({
       id: project.id,
     }));
@@ -63,6 +65,7 @@ export async function generateStaticParams() {
 }
 
 import DonationModal from "@/components/donation/DonationModal";
+import { Metadata } from "next";
 
 export default async function SingleProjectPage({
   params,

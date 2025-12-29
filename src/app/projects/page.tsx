@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Users, Heart, Share2, User } from "lucide-react";
