@@ -8,6 +8,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
+import CurrentYear from "@/components/layout/CurrentYear";
 
 export default function Footer() {
   return (
@@ -155,7 +156,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="relative z-10 border-t border-gray-900 mt-20 pt-8 text-center">
         <p className="text-xs text-gray-600">
-          Copyright © {new Date().getFullYear()} by{" "}
+          Copyright © <CurrentYear /> by{" "}
           <span className="text-gray-400">Langata Islamic Center</span>. All
           rights reserved.
         </p>
