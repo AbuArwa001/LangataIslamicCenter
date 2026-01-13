@@ -1,6 +1,9 @@
 import ReadMoreButton from "@/components/about/ReadMoreButton";
+import TeamMemberCard from "@/components/about/TeamMemberCard";
+import { members, chairman } from "@/data/team";
 
 export default function About() {
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -147,82 +150,26 @@ export default function About() {
 
         {/* Meet The Team Section */}
         <div className="pt-12">
-          <div className="text-center mb-16">
-            <div>
-              <h4 className="text-xs font-bold tracking-[0.2em] text-slate-500 uppercase mb-3">
-                Meet the Team
-              </h4>
-              <h2 className="text-4xl md:text-5xl font-serif font-medium text-slate-900">
-                Powered by our people
-              </h2>
-            </div>
-          </div>
-
-          <div className="space-y-16">
-            {/* Chairman Card */}
-            <div className="max-w-3xl mx-auto bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-slate-300 h-80 relative overflow-hidden">
-                {/* Wave Pattern SVG */}
-                <div className="absolute inset-0 opacity-30">
-                  <svg
-                    viewBox="0 0 1440 320"
-                    className="absolute bottom-0 w-full h-auto text-white fill-current"
-                  >
-                    <path d="M0,160L60,165.3C120,171,240,181,360,197.3C480,213,600,235,720,224C840,213,960,171,1080,160C1200,149,1320,171,1380,181.3L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-                  </svg>
-                </div>
-                <div className="absolute bottom-10 left-10 w-16 h-16 bg-slate-100 rounded-full opacity-50"></div>
-              </div>
-              <div className="p-10 text-center">
-                <h3 className="text-3xl font-serif text-slate-900 mb-2">
-                  Ibrahim Said
-                </h3>
-                <p className="text-slate-600 mb-6 font-light">
-                  A Renowned Islamic Scholar With 20+ Years Of Community
-                  Leadership Experience.
-                </p>
-                <div className="inline-block border border-slate-800 px-6 py-2 text-xs font-bold text-slate-800 uppercase tracking-wider">
-                  Chairman, LIWO Mosque Board
-                </div>
-              </div>
-            </div>
-
-            {/* Other Team Members Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { name: "Juma Abdallah", role: "Treasurer" },
-                { name: "Osman Ali", role: "Vice Treasurer" },
-                { name: "Abubakar Hussein", role: "Assistant Secretary" },
-                { name: "Abdullahi Abdi", role: "Organising Secretary" },
-              ].map((member, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
-                >
-                  <div className="bg-slate-300 h-64 relative overflow-hidden">
-                    {/* Wave Pattern SVG */}
-                    <div className="absolute inset-0 opacity-30">
-                      <svg
-                        viewBox="0 0 1440 320"
-                        className="absolute bottom-0 w-full h-auto text-white fill-current transform scale-150 origin-bottom"
-                      >
-                        <path d="M0,128L48,144C96,160,192,192,288,197.3C384,203,480,181,576,181.3C672,181,768,203,864,224C960,245,1056,267,1152,261.3C1248,256,1344,224,1392,208L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                      </svg>
+          <div className="container mx-auto px-4 py-20 max-w-7xl">
+                  <div className="pt-12">
+                    <div className="text-center mb-16">
+                      <h4 className="text-xs font-bold tracking-[0.2em] text-slate-500 uppercase mb-3">Meet the Team</h4>
+                      <h2 className="text-4xl md:text-5xl font-serif font-medium text-slate-900">Powered by our people</h2>
                     </div>
-                    <div className="absolute bottom-8 left-6 w-12 h-12 bg-slate-100 rounded-full opacity-50"></div>
-                  </div>
-                  <div className="p-8 text-center bg-[#f9fafb]">
-                    <h3 className="text-xl font-serif text-slate-900 mb-4">
-                      {member.name}
-                    </h3>
-                    <div className="inline-block border border-slate-400 px-4 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-widest bg-white">
-                      {member.role}
+
+                    <div className="space-y-16">
+                      {/* Chairman Section */}
+                      <TeamMemberCard member={chairman} />
+
+                      {/* Grid Section */}
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {members.map((m, i) => (
+                          <TeamMemberCard key={i} member={m} />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>
