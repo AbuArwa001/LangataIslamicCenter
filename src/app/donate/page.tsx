@@ -24,8 +24,8 @@ export default function DonatePage() {
             Support Our Cause
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed">
-            Your generous donations help us maintain the mosque, support our
-            educational programs, and provide for the needy in our community.
+            Your generous donations help us build our mosque and support the Masjid Building
+            Project of the Langata Islamic Welfare Organization, creating a lasting place of worship for our community.
           </p>
         </div>
       </section>
@@ -45,68 +45,62 @@ export default function DonatePage() {
           {/* Info Column */}
           <div className="lg:col-span-1 space-y-8">
             {/* Why Donate Card */}
-            <div className="bg-[#441A05] text-white rounded-3xl p-8 shadow-xl">
-              <h3 className="text-2xl font-bold font-serif mb-4">
-                Why Donate?
-              </h3>
-              <p className="text-white/90 leading-relaxed mb-6">
-                Every contribution, no matter how small, makes a significant
-                impact. Your Sadaqah Jariyah helps build a legacy of faith and
-                community support.
-              </p>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3">
-                  <Building2 className="w-5 h-5 text-[#FFC06E]" />
-                  <span>Mosque Maintenance</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <HandCoins className="w-5 h-5 text-[#FFC06E]" />
-                  <span>Community Outreach</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <HeartHandshake className="w-5 h-5 text-[#FFC06E]" />
-                  <span>Educational Programs</span>
-                </li>
-              </ul>
+            <div className="lg:col-span-1 space-y-8">
+              {/* Why Donate Card */}
+              <div className="bg-[#441A05] text-white rounded-3xl p-8 shadow-xl">
+                <h3 className="text-2xl font-bold font-serif mb-4">
+                  Why Donate?
+                </h3>
+
+                <p className="text-white/90 leading-relaxed mb-6">
+                  Every contribution, no matter the size, makes a meaningful difference.
+                  Your Sadaqah Jariyah helps build a permanent house of worship and nurtures
+                  a lasting legacy of faith, unity, and service for generations to come.
+                </p>
+
+                <ul className="space-y-4">
+                  <li className="flex items-center gap-3">
+                    <Building2 className="w-5 h-5 text-[#FFC06E]" />
+                    <span className="font-medium">Mosque Construction</span>
+                  </li>
+
+                  <li className="flex items-center gap-3">
+                    <HandCoins className="w-5 h-5 text-[#FFC06E]" />
+                    <span className="font-medium">Community Support & Outreach</span>
+                  </li>
+
+                  <li className="flex items-center gap-3">
+                    <HeartHandshake className="w-5 h-5 text-[#FFC06E]" />
+                    <span className="font-medium">Islamic & Educational Programs</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-
             {/* Other Ways to Give */}
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-              <h3 className="text-2xl font-bold text-[#441A05] font-serif mb-6">
-                Other Ways to Give
-              </h3>
-
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-bold text-lg text-[#3d2616] mb-2">
-                    Bank Transfer
-                  </h4>
-                  <div className="bg-gray-50 p-4 rounded-xl text-sm text-[#5c4033] space-y-1">
-                    <p>
-                      <span className="font-semibold">Bank:</span> KCB Bank
-                    </p>
-                    <p>
-                      <span className="font-semibold">Account Name:</span>{" "}
-                      Langata Islamic Center
-                    </p>
-                    <p>
-                      <span className="font-semibold">Account No:</span>{" "}
-                      1234567890
-                    </p>
-                  </div>
+            <div>
+              <h4 className="font-bold text-lg text-[#3d2616] mb-2">
+                Bank Transfer
+              </h4>
+              <div className="bg-gray-50 p-6 rounded-xl text-sm text-[#5c4033] space-y-2 border border-gray-200">
+                <div className="flex justify-between border-b border-gray-200 pb-1">
+                  <span className="font-semibold text-gray-500 uppercase text-[10px] tracking-wider">Bank</span>
+                  <span className="font-medium">Premier Bank Kenya</span>
                 </div>
-
-                <div>
-                  <h4 className="font-bold text-lg text-[#3d2616] mb-2">
-                    In-Kind Donations
-                  </h4>
-                  <p className="text-[#5c4033] text-sm mb-3">
-                    We accept food, clothes, and other items for our community
-                    outreach programs.
-                  </p>
-                  <p className="text-sm font-bold text-[#00b17b]">
-                    Visit our office to drop off items.
-                  </p>
+                <div className="flex justify-between border-b border-gray-200 pb-1">
+                  <span className="font-semibold text-gray-500 uppercase text-[10px] tracking-wider">Branch</span>
+                  <span className="font-medium">Wabera Branch</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-200 pb-1">
+                  <span className="font-semibold text-gray-500 uppercase text-[10px] tracking-wider">Account Name</span>
+                  <span className="font-medium">Langata Islamic Welfare Organization</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-200 pb-1">
+                  <span className="font-semibold text-gray-500 uppercase text-[10px] tracking-wider">Account No (KES)</span>
+                  <span className="font-bold text-slate-900">0012556901</span>
+                </div>
+                <div className="flex justify-between pt-1">
+                  <span className="font-semibold text-gray-500 uppercase text-[10px] tracking-wider">SWIFT Code</span>
+                  <span className="font-medium italic">IFCBKENA</span>
                 </div>
               </div>
             </div>
