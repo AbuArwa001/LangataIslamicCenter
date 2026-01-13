@@ -198,7 +198,7 @@ export default function Header() {
                       className="ml-4 mt-4 flex flex-col space-y-4 border-l-2 border-[#FFC06E]/30 pl-4"
                     >
                       <Link
-                        href="/about/story"
+                        href="/about"
                         className="text-gray-300 text-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
