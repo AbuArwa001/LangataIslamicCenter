@@ -46,28 +46,33 @@ export default function MpesaForm({ amount, setAmount, projectId, onMessage }: B
         <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
           <Phone className="w-4 h-4 text-emerald-600" /> Phone Number
         </label>
-        <input 
-            type="tel" 
-            placeholder="07XX XXX XXX" 
-            value={phoneNumber} 
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none" 
-            required 
+        <input
+          type="tel"
+          placeholder="07XX XXX XXX"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          className="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none"
+          required
         />
       </div>
       <div className="space-y-2">
         <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
           <Coins className="w-4 h-4 text-emerald-600" /> Amount (KES)
         </label>
-        <input 
-            type="number" 
-            value={amount} 
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none" 
-            required 
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none"
+          required
         />
       </div>
-      <button type="submit" disabled={loading} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-lg flex justify-center items-center gap-2">
+      <button 
+      type="submit" 
+      disabled={loading}
+      // onClick={handleSubmit}
+      className="w-full py-4 bg-emerald-600 text-white font-bold rounded-lg flex justify-center items-center gap-2"
+      >
         {loading ? <Loader2 className="animate-spin" /> : "Donate with M-Pesa"}
       </button>
     </form>
