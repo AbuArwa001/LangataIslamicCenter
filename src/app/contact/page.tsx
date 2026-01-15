@@ -68,7 +68,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-[#441A05]">Call Us</h3>
-                    <p className="text-gray-600">+254 700 000 000</p>
+                    <p className="text-gray-600">+254 722 298 882</p>
                   </div>
                 </div>
 
