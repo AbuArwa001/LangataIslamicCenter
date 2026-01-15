@@ -1,67 +1,82 @@
 "use client";
-
-import { useState } from "react";
-import {DonationHeader} from "./DonationHeader";
-import {DonationTabs} from "./DonationTabs";
-import DonationProgress from "./DonationProgress";
-import MpesaForm from "./forms/MpesaForm";
-import StripeCardForm from "./forms/StripeCardForm";
-import PayPalForm from "./forms/PayPalForm";
-import PaystackForm from "./forms/PaystackForm";
-import { PaymentTab, DonationMessage } from "./types";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { getProjectById } from "@/data/projects";
+import { DonationHeader } from "./DonationHeader";
+import { DonationTabs } from "./DonationTabs";
+import DonationProgress from "./DonationProgress";
+import { PaymentFormRenderer } from "./donationFormComponents/PaymentFormRenderer";
+import { StatusMessage } from "./donationFormComponents/StatusMessage";
+import { PaymentTab, DonationMessage } from "./types";
 
 export default function DonationForm({ projectId }: { projectId?: string }) {
+  const searchParams = useSearchParams();
+  const resolvedProjectId = projectId ?? searchParams.get("project") ?? null;
+
   const [activeTab, setActiveTab] = useState<PaymentTab>("mpesa");
   const [amount, setAmount] = useState("");
+  const [goalAmount, setGoalAmount] = useState(0);
   const [message, setMessage] = useState<DonationMessage | null>(null);
-  const searchParams = useSearchParams();
-  
-  // 1. Get the ID from the URL if the prop wasn't passed directly
-  const queryProjectId = searchParams.get("project");
-  if (!projectId && queryProjectId) {
-    projectId = queryProjectId;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!resolvedProjectId) {
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchProject = async () => {
+      try {
+        setIsLoading(true);
+        const project = await getProjectById(resolvedProjectId);
+        setGoalAmount(Number(project.goal_amount) || 0);
+        // Usually, you don't want to set the user's donation amount 
+        // to the total_donated immediately, but keeping your logic:
+        setAmount(project.total_donated ? String(project.total_donated) : "");
+      } catch (err) {
+        console.error("Failed to fetch project:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProject();
+  }, [resolvedProjectId]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-lg mx-auto animate-pulse">
+        <div className="h-4 bg-slate-200 rounded w-full mb-6" />
+        <div className="bg-white rounded-2xl shadow-xl h-[400px] border border-slate-100" />
+      </div>
+    );
   }
-  
-  // Constants (Ideally fetched from an API or config)
-  const goalAmount = 324000000;
-  const currentAmount = 2450000;
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      {!projectId && <DonationProgress currentAmount={currentAmount} goalAmount={goalAmount} />}
+    <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
+      <div className="w-full max-w-lg mx-auto">
+        {resolvedProjectId && (
+          <DonationProgress currentAmount={Number(amount) || 0} goalAmount={goalAmount} />
+        )}
 
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        <DonationHeader projectId={projectId} />
-        
-        <DonationTabs activeTab={activeTab} onChange={setActiveTab} />
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+          <DonationHeader projectId={resolvedProjectId ?? undefined} />
+          <DonationTabs activeTab={activeTab} onChange={setActiveTab} />
 
-        <div className="p-8">
-          {activeTab === "mpesa" && (
-            <MpesaForm amount={amount} setAmount={setAmount} projectId={projectId||null} onMessage={setMessage} />
-          )}
-          {activeTab === "card" && (
-            <StripeCardForm amount={amount} setAmount={setAmount} projectId={projectId||null} onMessage={setMessage} />
-          )}
-          {activeTab === "paypal" && (
-            <PayPalForm amount={amount} setAmount={setAmount} projectId={projectId||null} onMessage={setMessage} />
-          )}
-          {activeTab === "paystack" && (
-            <PaystackForm amount={amount} setAmount={setAmount} projectId={projectId||null} onMessage={setMessage} />
-          )}
+          <div className="p-8">
+            <PaymentFormRenderer
+              activeTab={activeTab}
+              amount={amount}
+              setAmount={setAmount}
+              projectId={resolvedProjectId}
+              onMessage={setMessage}
+            />
 
-          {/* Shared Status Message Component */}
-          {message && (
-            <div className={`mt-4 p-4 rounded-lg flex items-start gap-3 text-sm ${
-              message.type === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"
-            }`}>
-              {message.type === "success" ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
-              <p>{message.text}</p>
-            </div>
-          )}
+            <StatusMessage message={message} />
+          </div>
         </div>
       </div>
-    </div>
+    </PayPalScriptProvider>
   );
 }

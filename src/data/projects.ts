@@ -39,3 +39,19 @@ export const projects = [
         donorCount: 12
     }
 ];
+
+export const getProjectById = async (projectId: string) => {
+    const project = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${projectId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        cache: "no-store"
+    });
+
+    if (!project.ok) {
+        throw new Error("Failed to fetch project data");
+    }
+
+    return project.json();
+}

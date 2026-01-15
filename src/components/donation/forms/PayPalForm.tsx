@@ -1,13 +1,12 @@
 "use client";
 
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {  PayPalButtons } from "@paypal/react-paypal-js";
 import { Coins } from "lucide-react";
 import { BaseFormProps } from "../types";
 
 export default function PayPalForm({ amount, setAmount, projectId, onMessage }: BaseFormProps) {
   return (
     <div className="space-y-6 py-8 text-center animate-in fade-in slide-in-from-bottom-4">
-      <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
         <div className="space-y-2 mb-4">
           <label className="text-sm font-semibold text-slate-700 flex items-center justify-center gap-2">
             <Coins className="w-4 h-4 text-emerald-600" /> Amount (USD)
@@ -39,7 +38,7 @@ export default function PayPalForm({ amount, setAmount, projectId, onMessage }: 
             if (res.ok) onMessage({ type: "success", text: "Transaction completed!" });
           }}
         />
-      </PayPalScriptProvider>
+
     </div>
   );
 }
