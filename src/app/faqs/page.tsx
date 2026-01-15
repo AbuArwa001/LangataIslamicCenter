@@ -6,7 +6,7 @@ const faqs = [
     question:
       "What is the total cost of the new Islamic Center and Rental Project?",
     answer:
-      "The total estimated cost for the complete development — including the masjid, school, madrasa, library, technical school, revert center, female student hostels, and rental apartments — is Ksh 324 million. This includes construction, finishing, furnishing, and initial operational costs.",
+      "The total estimated cost for the complete development — including the masjid, school, madrasa, library, technical school, revert center, female student hostels, and rental apartments — is Ksh 578 million. This includes construction, finishing, furnishing, and initial operational costs.",
   },
   {
     question: "How long will the construction take to complete?",
