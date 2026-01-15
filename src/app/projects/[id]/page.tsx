@@ -19,6 +19,7 @@ interface Project {
   image: string | null;
   images: { id: number; image: string }[];
   total_donated?: number;
+  total_donors?: number;
   progress_percentage?: number;
 }
 
@@ -74,17 +75,18 @@ export default async function SingleProjectPage({
 }) {
   const { id } = await params;
   let project: Project | null = null;
-
   try {
     project = await fetchProject(id);
+    
   } catch (e) {
     console.error("Failed to fetch project", e);
   }
+  
 
   if (!project) {
     notFound();
   }
-
+  const donors = project.total_donors ?? 0;
   const progress =
     project.progress_percentage ??
     (project.goal_amount
@@ -168,7 +170,7 @@ export default async function SingleProjectPage({
 
                 <div className="flex items-center text-sm text-muted-foreground pt-2">
                   <Users className="w-4 h-4 mr-2" />
-                  <span className="font-medium">0 Donors</span>
+                  <span className="font-medium">{`${donors == 1 ? donors+" Donor" : donors +" Donors"}`}</span>
                 </div>
               </div>
 
