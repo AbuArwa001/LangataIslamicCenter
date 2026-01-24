@@ -1,4 +1,5 @@
-import type { Metadata, Viewport } from "next"; // Added for type safety
+import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import { Roboto_Slab } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -58,6 +59,7 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <Analytics />
         <Footer />
       </body>
     </html>
