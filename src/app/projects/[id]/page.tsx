@@ -77,7 +77,9 @@ export default async function SingleProjectPage({
   const { id } = await params;
   let project: Project | null = await fetchProject(id).catch(() => null);
 
-  if (!project) notFound();
+  if (!project) {
+    notFound();
+  }
 
   const initialStats = {
     id: project.id,
@@ -87,41 +89,92 @@ export default async function SingleProjectPage({
     total_donors: project.total_donors,
     progress_percentage: project.progress_percentage,
   };
+  const donors = project.total_donors ?? 0;
+  const progress =
+    project.progress_percentage ??
+    (project.goal_amount
+      ? (project.current_amount / project.goal_amount) * 100
+      : 0);
+  const raisedAmount = project.total_donated ?? project.current_amount;
+  const image = project.image || "/about_1.jpg";
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* ... Hero Section remains exactly as you had it ... */}
+      {/* Hero / Header Image */}
+      <section className="relative h-[50vh] min-h-[400px]">
+        <Image
+          src={image}
+          alt={project.name}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white text-center px-4 drop-shadow-lg font-serif">
+            {project.name}
+          </h1>
+        </div>
+      </section>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 md:py-20">
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-12">
-             <ProjectDescription description={project.description} />
+            {/* Meta Data */}
+            <div className="flex items-center space-x-6 text-sm text-muted-foreground uppercase tracking-wider font-medium border-b pb-8">
+              <div className="flex items-center">
+                <User className="w-4 h-4 mr-2" />
+                ADMIN
+              </div>
+              <span>•</span>
+              <span>{project.start_date}</span>
+            </div>
+            {/* Description */}
+            <ProjectDescription description={project.description} />
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar / Donation Section */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 bg-white border border-gray-100 rounded-2xl shadow-xl p-8 space-y-8">
-              <h3 className="text-2xl font-bold text-[#3d2616] font-serif">
-                Support this Project
-              </h3>
-
-              {/* LIVE SECTION REPLACES OLD STATIC CODE */}
-              <LiveDonationProgress initialData={initialStats} />
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-[#3d2616] font-serif">
+                  Support this Project
+                </h3>
+                <LiveDonationProgress initialData={initialStats} />
+                {/* <div className="flex items-center text-sm text-muted-foreground pt-2">
+                  <Users className="w-4 h-4 mr-2" />
+                  <span className="font-medium">{`${donors == 1 ? donors+" Donor" : donors +" Donors"}`}</span>
+                </div> */}
+              </div>
 
               <DonationModal
                 projectId={project.id}
                 projectName={project.name}
                 trigger={
-                  <button className="block w-full bg-[#00b17b] hover:bg-[#009e6d] text-white text-center py-4 rounded-xl font-bold text-lg transition-colors flex items-center justify-center">
+                  <button className="block w-full bg-[#00b17b] hover:bg-[#009e6d] text-white text-center py-4 rounded-xl font-bold text-lg transition-colors shadow-md hover:shadow-lg flex items-center justify-center">
                     <HandHeart className="w-5 h-5 mr-2" />
                     Donate Now
                   </button>
                 }
               />
-              {/* ... rest of the sidebar ... */}
+
+              <div className="bg-orange-50 rounded-xl p-4 text-sm text-[#5c4033]">
+                <p className="font-medium mb-1">Why donate?</p>
+                <p>
+                  Your contribution directly supports the completion of this
+                  project and benefits the entire community.
+                </p>
+              </div>
             </div>
           </div>
+        </div>
+        {/* Gallery Section */}
+        <div className="space-y-8 pt-12 border-t mt-12">
+          <h3 className="text-3xl font-bold text-center text-[#3d2616] font-serif">
+            Project Gallery
+          </h3>
+          <ProjectGallery images={project.images} projectName={project.name} />
         </div>
       </div>
     </div>
